@@ -26,9 +26,11 @@ q_tau(h) = clamp(mu(h) +/- k_tau * sigma * sqrt(h), 0, 1)
   the median drifts toward the normalised share `x/S` with
   `(1 - exp(-h/120))`. This is deliberately OFF for the FAA event, whose
   four markets are not mutually exclusive and sum to ~0.09.
-- Outer quantiles use multiplier 1.8, inner 0.55 — wider outside, narrower
+- Outer quantiles use multiplier 1.8, inner 0.5 — wider outside, narrower
   inside than a normal, matching the jump mixture of these prices (mostly
-  still, occasionally jumping).
+  still, occasionally jumping). The inner value comes from a 1-D scan:
+  0.5 beats 0.55 at every outer value tried (practice loss 0.26479 vs
+  0.26483).
 
 ## Local validation
 

@@ -46,11 +46,12 @@
 //     there: normalising the FAA vector to sum 1 would push every median up
 //     ~10x and destroy the final score.
 //   - The quantile shape is wider outside, narrower inside than a normal:
-//     outer multiplier 1.8, inner 0.55 (a plain normal 1.645/0.674 scored
-//     0.2786, this shape 0.2648 with the sum adjustment). The shape reflects
-//     the jump mixture: most minutes the price does not move (narrow inner
-//     quantiles pay at every quiet minute), but jumps happen (the outer
-//     quantiles must reach them).
+//     outer multiplier 1.8, inner 0.5 (a plain normal 1.645/0.674 scored
+//     0.2786, this shape 0.2648 with the sum adjustment; a 1-D scan over the
+//     inner multiplier found 0.5 beats 0.55 at every outer value tried, so
+//     0.5 is used). The shape reflects the jump mixture: most minutes the
+//     price does not move (narrow inner quantiles pay at every quiet minute),
+//     but jumps happen (the outer quantiles must reach them).
 //   - The horizon grows like sqrt(h) (random walk). Slower growth (h^0.42,
 //     h^0.35) and faster (h^0.6) both scored worse.
 //   - A "historical simulation" design (empirical quantiles of past h-minute
@@ -78,7 +79,7 @@ const QUANTILES = [0.05, 0.25, 0.5, 0.75, 0.95];
 /** Outer quantile multiplier (5% / 95%) on sigma * sqrt(h). */
 const OUTER = 1.8;
 /** Inner quantile multiplier (25% / 75%) on sigma * sqrt(h). */
-const INNER = 0.55;
+const INNER = 0.5;
 /** Minutes of one-minute moves used for the realised-volatility estimate. */
 const VOL_WINDOW = 240;
 /** Floor and cap for sigma, in price units per square-root minute. */
